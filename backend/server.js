@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import db from './db.js';
+import dns from "node:dns/promises"
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
 dotenv.config();
 
