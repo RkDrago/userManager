@@ -18,11 +18,13 @@ function Login() {
         email,
         password
       });
+      console.log(res)
 
       login(res.data);
       navigate("/profile");
 
     } catch (err) {
+      console.log(err);
       alert(err.response?.data?.message || "Login failed");
     }
   };

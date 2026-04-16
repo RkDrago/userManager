@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 function Profile() {
   const { user, logout } = useContext(AuthContext);
-  console.log(user)
   const navigate = useNavigate();
 
    const handleLogout = () => {

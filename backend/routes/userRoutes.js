@@ -21,7 +21,7 @@ router.post('/auth/login', async (req, res) => {
             id: user.id
         }
         const token = generateToken(payload)
-        res.json({ token })
+        res.json({user, token })
     } catch (error) {
         console.error(error)
         res.status(500).json({ error: "Internal server error" })
