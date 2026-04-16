@@ -14,7 +14,7 @@ const app = express();
 db()
 
 app.use(cors({
-  origin: true,
+  origin: "https://user-manager-nu-two.vercel.app",
   credentials: true
 }));
 
