@@ -1,0 +1,33 @@
+User management dashboard
+--------------------------
+
+Models?
+Routes?
+
+app functionality
+
+1. user sign in
+2. admin role user can create new user
+3. admin can see list of users
+4. admin can update existing users
+5. admin can delete existing users
+6. user must have unique email id
+7. user can view their own profile
+8. user can change their password
+
+_____________________________________________
+
+Routes
+
+User Authentication:
+    /api/auth/login : POST - Log in to an existing account.
+
+User Profile:
+    /api/profile : GET - Get the user's profile information.
+    /api/profile/password : PUT - change the user's password.
+
+Admin User Management:
+    /api/users : GET - Get the list of users
+    /api/users : POST - Create a new user
+    /api/users/:userId : PUT - Update an existing user
+    /api/users/:userId : DELETE - Delete a user from the list.
