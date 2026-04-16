@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile"
-import Users from "./pages/Users";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -33,15 +32,6 @@ function App() {
           element={
             <ProtectedRoute>
               <Profile />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/users"
-          element={
-            <ProtectedRoute>
-              <Users />
             </ProtectedRoute>
           }
         />

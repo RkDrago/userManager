@@ -67,7 +67,7 @@ router.put('/:userID', jwtAuthMiddleware, async (req, res) => {
         }
 
         const userID = req.params.userID; //extract the id from the URL parameter
-        const updatedUserData = req.body // Updated data for the person
+        const updatedUserData = req.body // Updated data for the user
 
         const response = await User.findByIdAndUpdate(userID, updatedUserData, {
             new: true,
