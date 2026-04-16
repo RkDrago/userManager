@@ -14,11 +14,16 @@ const app = express();
 db()
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: true,
   credentials: true
 }));
 
 app.use(express.json());
+
+// test route
+app.get("/", (req, res) => {
+  res.send("Backend is running 🚀");
+});
 
 //use the routes
 app.use('/api/', userRoutes)
