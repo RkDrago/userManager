@@ -3,40 +3,58 @@ import { AuthContext } from "../context/AuthContext";
 import API from "../services/api";
 
 function Users() {
-  const { user } = useContext(AuthContext);
-  const [users, setUsers] = useState([]);
+    const { user } = useContext(AuthContext);
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-  // Admin check
-  if (user?.user?.role !== "admin") {
-    return <h2>Access Denied</h2>;
-  }
+    // Admin check
+    if (user?.user?.role !== "admin") {
+        return <h2>Access Denied</h2>;
+    }
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await API.get("/api/users");
-        setUsers(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const res = await API.get("/api/users");
+                setUsers(res.data);
+                setLoading(false);
+            } catch (err) {
+                console.log(err);
+            }
+        };
 
-    fetchUsers();
-  }, []);
+        fetchUsers();
+    }, []);
 
-  return (
-    <div>
-      <h2>User List</h2>
+    if (loading) return <h2>Loading users...</h2>;
 
-      <ul>
-        {users.map((u) => (
-          <li key={u._id}>
-            {u.name} - {u.email} ({u.role})
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+    return (
+        <div>
+            <h2>User List</h2>
+
+            <table border="1" cellPadding="10">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {users.map((u) => (
+                        <tr key={u._id}>
+                            <td>{u.name}</td>
+                            <td>{u.email}</td>
+                            <td>{u.role}</td>
+                            <td>{u.status}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
 }
 
 export default Users;
