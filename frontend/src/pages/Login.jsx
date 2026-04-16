@@ -1,5 +1,53 @@
+import { useState, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import API from "../services/api";
+
 function Login() {
-  return <h2>Login Page</h2>;
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await API.post("/api/auth/login", {
+        email,
+        password
+      });
+
+      login(res.data);
+      navigate("/profile");
+
+    } catch (err) {
+      alert(err.response?.data?.message || "Login failed");
+    }
+  };
+
+  return (
+    <div>
+      <h2>Login</h2>
+
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  );
 }
 
 export default Login;
