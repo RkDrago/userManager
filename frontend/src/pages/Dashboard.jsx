@@ -7,6 +7,14 @@ function Dashboard() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [editingUser, setEditingUser] = useState(null);
+    const [showForm, setShowForm] = useState(false);
+    const [newUser, setNewUser] = useState({
+        name: "",
+        email: "",
+        password: "",
+        role: "user",
+        status: "active"
+    });
 
     // Admin check
     if (user?.user?.role !== "admin") {
@@ -62,11 +70,35 @@ function Dashboard() {
         }
     };
 
+    const handleCreate = async () => {
+        try {
+            await API.post("/api/users", newUser);
+
+            setShowForm(false);
+            setNewUser({
+                name: "",
+                email: "",
+                password: "",
+                role: "user",
+                status: "active"
+            });
+
+            fetchUsers(); // refresh
+
+        } catch (err) {
+            console.log(err);
+            alert("Create failed");
+        }
+    };
+
     if (loading) return <h2>Loading users...</h2>;
 
     return (
         <div>
-            <h2>User List</h2>
+            <div className="">
+                <h2>User List</h2>
+                <button onClick={() => setShowForm(true)}>Add User</button>
+            </div>
 
             <table border="1" cellPadding="10">
                 <thead>
@@ -131,6 +163,55 @@ function Dashboard() {
 
                     <button onClick={handleUpdate}>Save</button>
                     <button onClick={() => setEditingUser(null)}>Cancel</button>
+                </div>
+            )}
+            {showForm && (
+                <div>
+                    <h3>Create User</h3>
+
+                    <input
+                        placeholder="Name"
+                        onChange={(e) =>
+                            setNewUser({ ...newUser, name: e.target.value })
+                        }
+                    />
+
+                    <input
+                        placeholder="Email"
+                        onChange={(e) =>
+                            setNewUser({ ...newUser, email: e.target.value })
+                        }
+                    />
+
+                    <input
+                        placeholder="Password"
+                        type="password"
+                        onChange={(e) =>
+                            setNewUser({ ...newUser, password: e.target.value })
+                        }
+                    />
+
+                    <select
+                        onChange={(e) =>
+                            setNewUser({ ...newUser, role: e.target.value })
+                        }
+                    >
+                        <option value="user">User</option>
+                        <option value="manager">Manager</option>
+                        <option value="admin">Admin</option>
+                    </select>
+
+                    <select
+                        onChange={(e) =>
+                            setNewUser({ ...newUser, status: e.target.value })
+                        }
+                    >
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+
+                    <button onClick={handleCreate}>Create</button>
+                    <button onClick={() => setShowForm(false)}>Cancel</button>
                 </div>
             )}
         </div>
