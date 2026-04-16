@@ -21,7 +21,7 @@ router.post('/auth/login', async (req, res) => {
             id: user.id
         }
         const token = generateToken(payload)
-        res.json({user, token })
+        res.json({ user, token })
     } catch (error) {
         console.error(error)
         res.status(500).json({ error: "Internal server error" })
@@ -43,17 +43,22 @@ router.get('/profile', jwtAuthMiddleware, async (req, res) => {
 })
 
 
-router.put('/profile/password', jwtAuthMiddleware, async (req, res) => {
+router.put('/profile/change-password', jwtAuthMiddleware, async (req, res) => {
     try {
         const userId = req.user.id //extract the id from the token
+        console.log(req)
         const { currentPassword, newPassword } = req.body //extract the current and new password from requrest body
 
         //Find the user by userId
         const user = await User.findById(userId);
 
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
         // if password does not match, return error
         if (!(await user.comparePassword(currentPassword))) {
-            return res.status(401).json({ error: 'current password did not matched !' });
+            return res.status(401).json({ error: '"Current password is incorrect"' });
         }
         //Update the user's password
         user.password = newPassword;

@@ -13,11 +13,22 @@ const checkAdminRole = async (userID) => {
     }
 }
 
+const getUserRole = async (userID) => {
+    try {
+        const user = await User.findById(userID);
+        return user?.role;
+    } catch (err) {
+        return null;
+    }
+};
+
 // Users list
 router.get('/', jwtAuthMiddleware, async (req, res) => {
     try {
-        if (! await checkAdminRole(req.user.id)) {
-            return res.status(403).json({ message: "user do not have an access to this route." })
+        const role = await getUserRole(req.user.id);
+
+        if (role !== "admin" && role !== "manager") {
+            return res.status(403).json({ message: "Access denied" });
         }
 
         const user = await User.find()
@@ -62,7 +73,7 @@ router.post('/', jwtAuthMiddleware, async (req, res) => {
 
 router.put('/:userID', jwtAuthMiddleware, async (req, res) => {
     try {
-        if (!checkAdminRole(req.user.id)) {
+        if (! await checkAdminRole(req.user.id)) {
             return res.status(403).json({ message: "user do not have an access to this route." })
         }
 
