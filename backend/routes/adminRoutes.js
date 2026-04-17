@@ -38,7 +38,7 @@ router.get('/', jwtAuthMiddleware, async (req, res) => {
         //Map the array of candidates
         const userList = user.map((data) => {
             return {
-                _id: data._id,
+                id: data._id,
                 name: data.name,
                 email: data.email,
                 role: data.role,

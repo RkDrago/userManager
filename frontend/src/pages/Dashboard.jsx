@@ -21,11 +21,12 @@ function Dashboard() {
         status: ""
     });
 
+    
     // Admin check
     if (user?.user?.role === "user") {
         return <h2>Access Denied. Forbidden (403)</h2>;
     }
-
+    
     const fetchUsers = async () => {
         try {
             const res = await API.get("/api/users");
@@ -35,18 +36,21 @@ function Dashboard() {
             console.log(err);
         }
     };
-
+    
     useEffect(() => {
         fetchUsers();
     }, []);
-
+    
     const handleEdit = (user) => {
         setEditingUser(user);
     };
-
+    
     const handleUpdate = async () => {
+        console.log(editingUser);
+        console.log(filteredUsers)
+        
         try {
-            await API.put(`/api/users/${editingUser._id}`, {
+            await API.put(`/api/users/${editingUser.id}`, {
                 name: editingUser.name,
                 email: editingUser.email,
                 role: editingUser.role,
@@ -174,7 +178,7 @@ function Dashboard() {
 
                             <tbody>
                                 {filteredUsers.map((u) => (
-                                    <tr key={u._id} className="border-t hover:bg-gray-50">
+                                    <tr key={u.id} className="border-t hover:bg-gray-50">
                                         <td className="p-3">{u.name}</td>
                                         <td className="p-3">{u.email}</td>
                                         <td className="p-3 capitalize">{u.role}</td>
@@ -207,7 +211,7 @@ function Dashboard() {
                                             )}
                                             {user?.user?.role === "admin" && (
                                                 <button
-                                                    onClick={() => handleDelete(u._id)}
+                                                    onClick={() => handleDelete(u.id)}
                                                     className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
                                                 >
                                                     Delete
