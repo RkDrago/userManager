@@ -42,7 +42,7 @@ function Dashboard() {
 
     const handleUpdate = async () => {
         try {
-            await API.put(`/api/users/${editingUser._id}`, {
+            await API.put(`/api/users/${editingUser.id}`, {
                 role: editingUser.role,
                 status: editingUser.status
             });
@@ -130,7 +130,7 @@ function Dashboard() {
 
                             <tbody>
                                 {users.map((u) => (
-                                    <tr key={u._id} className="border-t hover:bg-gray-50">
+                                    <tr key={u.id} className="border-t hover:bg-gray-50">
                                         <td className="p-3">{u.name}</td>
                                         <td className="p-3">{u.email}</td>
                                         <td className="p-3 capitalize">{u.role}</td>

@@ -12,7 +12,6 @@ function Profile() {
   });
 
   const handleChangePassword = async () => {
-    console.log(passwordData)
     try {
       await API.put("/api/profile/change-password", passwordData);
 
@@ -23,8 +22,9 @@ function Profile() {
         newPassword: ""
       });
 
+      setShowPasswordForm(false);
+
     } catch (err) {
-      console.log(err);
       alert(err.response?.data?.message || "Update failed");
     }
   };

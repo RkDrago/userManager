@@ -58,7 +58,7 @@ router.put('/profile/change-password', jwtAuthMiddleware, async (req, res) => {
 
         // if password does not match, return error
         if (!(await user.comparePassword(currentPassword))) {
-            return res.status(401).json({ error: '"Current password is incorrect"' });
+            return res.status(401).json({ message: '"Current password is incorrect"' });
         }
         //Update the user's password
         user.password = newPassword;
