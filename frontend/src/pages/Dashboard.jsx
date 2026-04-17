@@ -92,8 +92,6 @@ function Dashboard() {
         }
     };
 
-    if (loading) return <h2>Loading users...</h2>;
-
     return (
         <>
             <Navbar />
