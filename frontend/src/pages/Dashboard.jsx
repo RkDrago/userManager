@@ -28,14 +28,15 @@ function Dashboard() {
     }
     
     const fetchUsers = async () => {
-        try {
-            const res = await API.get("/api/users");
-            setUsers(res.data);
-            setLoading(false);
-        } catch (err) {
-            console.log(err);
-        }
-    };
+    try {
+        const res = await API.get("/api/users");
+        setUsers(res.data);
+    } catch (err) {
+        console.log(err);
+    } finally {
+        setLoading(false);
+    }
+};
     
     useEffect(() => {
         fetchUsers();
