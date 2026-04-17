@@ -46,7 +46,7 @@ function Dashboard() {
 
     const handleUpdate = async () => {
         try {
-            await API.put(`/api/users/${editingUser.id}`, {
+            await API.put(`/api/users/${editingUser._id}`, {
                 name: editingUser.name,
                 email: editingUser.email,
                 role: editingUser.role,
@@ -166,13 +166,15 @@ function Dashboard() {
                                     <th className="p-3">Email</th>
                                     <th className="p-3">Role</th>
                                     <th className="p-3">Status</th>
+                                    <th className="p-3">Created By</th>
+                                    <th className="p-3">Updated By</th>
                                     <th className="p-3">Actions</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 {filteredUsers.map((u) => (
-                                    <tr key={u.id} className="border-t hover:bg-gray-50">
+                                    <tr key={u._id} className="border-t hover:bg-gray-50">
                                         <td className="p-3">{u.name}</td>
                                         <td className="p-3">{u.email}</td>
                                         <td className="p-3 capitalize">{u.role}</td>
@@ -183,6 +185,13 @@ function Dashboard() {
                                                 }`}>
                                                 {u.status}
                                             </span>
+                                        </td>
+                                        <td className="p-3 text-sm text-gray-600">
+                                            {u.createdBy}
+                                        </td>
+
+                                        <td className="p-3 text-sm text-gray-600">
+                                            {u.updatedBy}
                                         </td>
 
                                         <td className="p-4 flex gap-3">

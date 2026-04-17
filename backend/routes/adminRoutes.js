@@ -32,15 +32,22 @@ router.get('/', jwtAuthMiddleware, async (req, res) => {
         }
 
         const user = await User.find()
+            .populate("createdBy.user", "name")
+            .populate("updatedBy.user", "name");
 
         //Map the array of candidates
         const userList = user.map((data) => {
             return {
-                id: data._id,
+                _id: data._id,
                 name: data.name,
                 email: data.email,
                 role: data.role,
                 status: data.status,
+
+                createdBy: data.createdBy?.[0]?.user?.name || "N/A",
+
+                updatedBy:
+                    data.updatedBy?.[data.updatedBy.length - 1]?.user?.name || "N/A"
             }
         })
 
@@ -87,14 +94,14 @@ router.put('/:userID', jwtAuthMiddleware, async (req, res) => {
 
         const userID = req.params.userID; //extract the id from the URL parameter
 
-        const targetUser = await User.findById(userID);
+        const user = await User.findById(userID);
 
-        if (!targetUser) {
+        if (!user) {
             return res.status(404).json({ error: "User not found!" });
         }
 
         // MANAGER cannot update ADMIN
-        if (role === "manager" && targetUser.role === "admin") {
+        if (role === "manager" && user.role === "admin") {
             return res.status(403).json({
                 message: "Managers cannot update admin users"
             });
@@ -102,15 +109,16 @@ router.put('/:userID', jwtAuthMiddleware, async (req, res) => {
 
         const updatedUserData = req.body // Updated data for the user
 
-        Object.assign(targetUser, updatedUserData);
+        Object.assign(user, updatedUserData);
 
-        targetUser.updatedBy.push({
+        user.updatedBy.push({
             user: req.user.id
         });
 
-        if (!targetUser.updatedBy) targetUser.updatedBy = [];
 
-        const response = await targetUser.save()
+        if (!user.updatedBy) user.updatedBy = [];
+
+        const response = await user.save()
 
         console.log("User data updated!")
         res.status(200).json(response)
