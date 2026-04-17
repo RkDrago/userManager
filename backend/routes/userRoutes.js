@@ -11,6 +11,12 @@ router.post('/auth/login', async (req, res) => {
         const { email, password } = req.body
         const user = await User.findOne({ email: email })
 
+        if (user?.status === "inactive") {
+            return res.status(403).json({
+                message: "Your account is inactive. Contact admin."
+            });
+        }
+
         //if the user is not found or the password is incorrect
         if (!user || !(await user.comparePassword(password))) {
             return res.status(401).json({ error: "Invalid email or password" })
@@ -41,6 +47,29 @@ router.get('/profile', jwtAuthMiddleware, async (req, res) => {
         res.status(500).json({ error: "Internal server error" })
     }
 })
+
+router.put('/profile', jwtAuthMiddleware, async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const name = req.body;
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            name,
+            { new: true }
+        );
+
+        res.status(200).json({
+            message: "Profile updated",
+            user: updatedUser
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
 
 
 router.put('/profile/change-password', jwtAuthMiddleware, async (req, res) => {

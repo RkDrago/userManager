@@ -4,12 +4,15 @@ import Navbar from "../components/Navbar";
 import API from "../services/api";
 
 function Profile() {
-  const { user } = useContext(AuthContext);
+  const { user , login } = useContext(AuthContext);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: ""
   });
+
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [name, setName] = useState(user?.user?.name || "");
 
   const handleChangePassword = async () => {
     try {
@@ -29,6 +32,25 @@ function Profile() {
     }
   };
 
+  const handleUpdateName = async () => {
+    try {
+      await API.put("/api/profile", { name });
+
+      alert("Name updated");
+
+      login({
+        ...user,
+        user: { ...user.user, name }
+      });
+
+      setIsEditingName(false);
+
+    } catch (err) {
+      console.log(err);
+      alert(err.response?.data?.message || "Update failed");
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -41,9 +63,49 @@ function Profile() {
             alt="avatar"
           />
 
-          <h2 className="text-xl font-semibold text-gray-800">
-            {user?.user?.name}
-          </h2>
+          <div className="flex items-center gap-2">
+
+            {isEditingName ? (
+              <>
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="border p-1 rounded-md text-center"
+                />
+
+                <button
+                  onClick={handleUpdateName}
+                  className="text-green-600 text-sm"
+                >
+                  Save
+                </button>
+
+                <button
+                  onClick={() => {
+                    setIsEditingName(false);
+                    setName(user?.user?.name); // reset
+                  }}
+                  className="text-gray-500 text-sm"
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <h2 className="text-xl font-semibold text-gray-800">
+                  {name}
+                </h2>
+
+                <button title="Edit Username"
+                  onClick={() => setIsEditingName(true)}
+                  className="text-blue-600 text-sm hover:underline"
+                >
+                  <img className="h-4 opacity-50 hover:opacity-80" src="edit.svg" alt="" />
+                </button>
+              </>
+            )}
+
+          </div>
 
           <div className="text-gray-600 text-sm space-y-1 text-center">
             <p><span className="font-medium">Email:</span> {user?.user?.email}</p>

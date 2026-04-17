@@ -43,6 +43,8 @@ function Dashboard() {
     const handleUpdate = async () => {
         try {
             await API.put(`/api/users/${editingUser.id}`, {
+                name: editingUser.name,
+                email: editingUser.email,
                 role: editingUser.role,
                 status: editingUser.status
             });
@@ -180,13 +182,17 @@ function Dashboard() {
                                 <input
                                     className="w-full border p-2 rounded"
                                     value={editingUser.name}
-                                    disabled
+                                    onChange={(e) =>
+                                        setEditingUser({ ...editingUser, name: e.target.value })
+                                    }
                                 />
 
                                 <input
                                     className="w-full border p-2 rounded"
                                     value={editingUser.email}
-                                    disabled
+                                    onChange={(e) =>
+                                        setEditingUser({ ...editingUser, email: e.target.value })
+                                    }
                                 />
 
                                 <select
