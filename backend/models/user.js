@@ -7,6 +7,19 @@ const userSchema = new mongoose.Schema({
   password: {type: String, required: true},
   role: {type: String, enum: ["user", "admin", "manager"], default: "user"},
   status: {type: String},
+  createdBy: [
+    {
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now
+        }
+    }
+  ],
   updatedBy: [
     {
         user: {

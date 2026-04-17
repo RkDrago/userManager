@@ -59,11 +59,17 @@ router.post('/', jwtAuthMiddleware, async (req, res) => {
             return res.status(403).json({ message: "user do not have an access to this route." })
         }
 
-        const data = req.body  //Assuming the request body contains the User data
-        const newUser = new User(data)
-        const response = await newUser.save()
+        const data = req.body
+        const newUser = new User({
+            ...data,
+            createdBy: [
+                {
+                    user: req.user.id
+                }
+            ]
+        }); const response = await newUser.save()
         console.log("data saved")
-        res.status(200).json({ response: response })
+        res.status(200).json({ response })
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: "Internal server error" })
@@ -96,17 +102,19 @@ router.put('/:userID', jwtAuthMiddleware, async (req, res) => {
 
         const updatedUserData = req.body // Updated data for the user
 
-        const response = await User.findByIdAndUpdate(userID, updatedUserData, {
-            new: true,
-            runValidators: true
-        })
+        Object.assign(targetUser, updatedUserData);
 
-        if (!response) {
-            return res.status(404).json({ error: "User not found!" })
-        }
+        targetUser.updatedBy.push({
+            user: req.user.id
+        });
+
+        if (!targetUser.updatedBy) targetUser.updatedBy = [];
+
+        const response = await targetUser.save()
 
         console.log("User data updated!")
         res.status(200).json(response)
+
     } catch (err) {
         console.log(err)
         res.status(500).json("Internal server Error!")
