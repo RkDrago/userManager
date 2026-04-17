@@ -28,7 +28,7 @@ router.get('/', jwtAuthMiddleware, async (req, res) => {
         const role = await getUserRole(req.user.id);
 
         if (role !== "admin" && role !== "manager") {
-            return res.status(403).json({ message: "Access denied" });
+            return res.status(403).json({ message: "Access user do not have access to this route." });
         }
 
         const user = await User.find()
@@ -73,11 +73,27 @@ router.post('/', jwtAuthMiddleware, async (req, res) => {
 
 router.put('/:userID', jwtAuthMiddleware, async (req, res) => {
     try {
-        if (! await checkAdminRole(req.user.id)) {
-            return res.status(403).json({ message: "user do not have an access to this route." })
+        const role = await getUserRole(req.user.id);
+
+        if (role !== "admin" && role !== "manager") {
+            return res.status(403).json({ message: "user do not have access to this route." });
         }
 
         const userID = req.params.userID; //extract the id from the URL parameter
+
+        const targetUser = await User.findById(userID);
+
+        if (!targetUser) {
+            return res.status(404).json({ error: "User not found!" });
+        }
+
+        // MANAGER cannot update ADMIN
+        if (role === "manager" && targetUser.role === "admin") {
+            return res.status(403).json({
+                message: "Managers cannot update admin users"
+            });
+        }
+
         const updatedUserData = req.body // Updated data for the user
 
         const response = await User.findByIdAndUpdate(userID, updatedUserData, {

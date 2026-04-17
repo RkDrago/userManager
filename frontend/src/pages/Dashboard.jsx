@@ -19,7 +19,7 @@ function Dashboard() {
 
     // Admin check
     if (user?.user?.role === "user") {
-        return <h2>Access Denied</h2>;
+        return <h2>Access Denied. Forbidden (403)</h2>;
     }
 
     const fetchUsers = async () => {
@@ -142,25 +142,26 @@ function Dashboard() {
                                     </td>
 
                                     <td className="p-4 flex gap-3">
-                                        {user?.user?.role === "admin" ? (
-                                            <>
-                                                <button
-                                                    onClick={() => handleEdit(u)}
-                                                    className="bg-yellow-400 hover:bg-yellow-500 px-3 py-1 rounded-md text-sm"
-                                                >
-                                                    Edit
-                                                </button>
-
-                                                <button
-                                                    onClick={() => handleDelete(u._id)}
-                                                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
-                                                >
-                                                    Delete
-                                                </button>
-                                            </>
+                                        {user?.user?.role === "admin" || (user?.user?.role === "manager" && u.role !== "admin") ? (
+                                            <button
+                                                onClick={() => handleEdit(u)}
+                                                className="bg-yellow-400 hover:bg-yellow-500 px-3 py-1 rounded-md text-sm"
+                                            >
+                                                Edit
+                                            </button>
                                         ) : (
                                             <span className="text-gray-400 text-sm">Read only</span>
                                         )}
+                                        {user?.user?.role === "admin" && (
+                                            <button
+                                                onClick={() => handleDelete(u._id)}
+                                                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm"
+                                            >
+                                                Delete
+                                            </button>
+
+                                        )}
+
                                     </td>
                                 </tr>
                             ))}
