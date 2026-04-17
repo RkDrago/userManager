@@ -8,17 +8,37 @@ import { AuthContext } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path="/"
-          element={user ? <Navigate to="/profile" /> : <Navigate to="/login" />}
+          element={
+            loading ? (
+              <h2 className="h-screen flex items-center justify-center">
+                Loading...
+              </h2>
+            ) : user ? (
+              <Navigate to="/profile" />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
         <Route
           path="/login"
-          element={user ? <Navigate to="/profile" /> : <Login />}
+          element={
+            loading ? (
+              <h2 className="h-screen flex items-center justify-center">
+                Loading...
+              </h2>
+            ) : user ? (
+              <Navigate to="/profile" />
+            ) : (
+              <Login />
+            )
+          }
         />
         <Route
           path="/dashboard"
