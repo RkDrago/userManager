@@ -16,6 +16,10 @@ function Dashboard() {
         role: "user",
         status: "active"
     });
+    const [filters, setFilters] = useState({
+        role: "",
+        status: ""
+    });
 
     // Admin check
     if (user?.user?.role === "user") {
@@ -93,6 +97,13 @@ function Dashboard() {
         }
     };
 
+    const filteredUsers = users.filter((u) => {
+        return (
+            (filters.role ? u.role === filters.role : true) &&
+            (filters.status ? u.status === filters.status : true)
+        );
+    });
+
     return (
         <>
             <Navbar />
@@ -117,6 +128,35 @@ function Dashboard() {
                         )}
                     </div>
 
+                    <div className="flex gap-4 mb-4">
+
+                        <select
+                            className="border p-2 rounded-md"
+                            value={filters.role}
+                            onChange={(e) =>
+                                setFilters({ ...filters, role: e.target.value })
+                            }
+                        >
+                            <option value="">All Roles</option>
+                            <option value="admin">Admin</option>
+                            <option value="manager">Manager</option>
+                            <option value="user">User</option>
+                        </select>
+
+                        <select
+                            className="border p-2 rounded-md"
+                            value={filters.status}
+                            onChange={(e) =>
+                                setFilters({ ...filters, status: e.target.value })
+                            }
+                        >
+                            <option value="">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+
+                    </div>
+
                     {/* Table */}
                     <div className="bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="w-full text-left">
@@ -131,7 +171,7 @@ function Dashboard() {
                             </thead>
 
                             <tbody>
-                                {users.map((u) => (
+                                {filteredUsers.map((u) => (
                                     <tr key={u.id} className="border-t hover:bg-gray-50">
                                         <td className="p-3">{u.name}</td>
                                         <td className="p-3">{u.email}</td>
