@@ -101,7 +101,7 @@ router.put('/:userID', jwtAuthMiddleware, async (req, res) => {
         }
 
         // MANAGER cannot update ADMIN and managers
-        if (role === "manager" && user.role === "admin" || "manager") {
+        if (role === "manager" && (user.role === "admin" || user.role === "manager")) {
             return res.status(403).json({
                 message: "Managers cannot update admin users"
             });

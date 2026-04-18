@@ -3,8 +3,8 @@
 A full-stack User Management System built with the MERN stack (MongoDB, Express.js, React.js, Node.js) featuring secure authentication, JWT authorization, role-based access control, and protected routes.
 
 ## 🚀 Live Demo
-Frontend: https://your-frontend-url.vercel.app  
-Backend API: https://your-backend-url.onrender.com
+Frontend: https://user-manager-nu-two.vercel.app 
+Backend API: https://usermanager-meik.onrender.com
 
 ---
 
