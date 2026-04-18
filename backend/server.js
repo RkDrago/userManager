@@ -25,6 +25,10 @@ app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
 });
 
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
 //use the routes
 app.use('/api/', userRoutes)
 app.use('/api/users', adminRoutes)

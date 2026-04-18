@@ -200,7 +200,7 @@ function Dashboard() {
                                         </td>
 
                                         <td className="p-4 flex gap-3">
-                                            {user?.user?.role === "admin" || (user?.user?.role === "manager" && u.role !== "admin") ? (
+                                            {user?.user?.role === "admin" || (user?.user?.role === "manager" && u.role !== "admin" || "manager") ? (
                                                 <button
                                                     onClick={() => handleEdit(u)}
                                                     className="bg-yellow-400 hover:bg-yellow-500 px-3 py-1 rounded-md text-sm"
