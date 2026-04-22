@@ -1,3 +1,8 @@
+# Demo user credential
+
+email : admin@test.com
+password : user123
+
 # MERN User Management System
 
 A full-stack User Management System built with the MERN stack (MongoDB, Express.js, React.js, Node.js) featuring secure authentication, JWT authorization, role-based access control, and protected routes.
